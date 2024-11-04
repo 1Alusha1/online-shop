@@ -52,7 +52,6 @@ interface Card {
 
 const Card: FC<Card> = ({ good }) => {
   const addToCart = useStore((state) => state.addToCart);
-  const goods = useStore((state) => state.goods);
 
   const normalizeString = (str: string) => str.split(" ").slice(0, 6).join(" ");
 

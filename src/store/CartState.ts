@@ -26,16 +26,21 @@ const cartStore: CartStateCreator = (set) => ({
   sum: 0,
   together: 0,
   goods: [],
-  delete: (good) => {
+
+  delete: (good: { id: number; price: number; count?: number }) => {
     set((state) => {
       const newGoods = state.goods.filter((g) => g.id !== good.id);
-      const newTogether = newGoods.reduce((acc, good) => acc + good.count!, 0);
-
-      const hasCountField = good.hasOwnProperty("good");
-      console.log(hasCountField);
-      const sum = (state.sum -= good.price * good.count);
-
-      return { goods: newGoods, together: newTogether, sum };
+      
+      const removedGoodCount = good.count ?? 1; 
+      const removedGoodSum = good.price * removedGoodCount; 
+  
+      const newTogether = newGoods.reduce(
+        (acc, g) => acc + (g.count ?? 0), 
+        0
+      );
+      const newSum = state.sum - removedGoodSum;
+  
+      return { goods: newGoods, together: newTogether, sum: newSum };
     });
   },
   increase: (good) => {

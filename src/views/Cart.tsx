@@ -138,7 +138,7 @@ const Cart = () => {
             Together: <span>{together}</span>
           </Paragraph>
           <Paragraph>
-            Sum: <span>${Math.round(parseFloat(sum) * 100) / 100}</span>
+            Sum: <span>${Math.round(sum * 100) / 100}</span>
           </Paragraph>
         </Group>
         <Button
