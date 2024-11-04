@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import useStore from "../store/CartState";
-import { string } from "zod";
 
 const ButtonEl = styled.button`
   position: relative;
