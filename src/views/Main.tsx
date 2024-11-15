@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import data from "../../data.json";
-import Card from "../components/Card";
+import Card, { Goods } from "../components/Card";
 import { useEffect, useState } from "react";
+import FillterGoods from "./FilterGoods";
 
 const Wrapper = styled.div`
   display: grid;
@@ -9,26 +10,20 @@ const Wrapper = styled.div`
   grid-column-gap: 30px;
   grid-row-gap: 30px;
 
+  @media (max-width: 992px) {
+    & {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
   @media (max-width: 768px) {
     & {
       grid-template-columns: 1fr;
+      padding: 0;
     }
   }
 `;
 
-interface Goods {
-  id: number;
-  name: string;
-  price: number;
-  img: string;
-  alt: string;
-}
-
 const PAGE_SIZE = 10;
-
-function generateUniqueId() {
-  return `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-}
 
 const Main = () => {
   const [loadedGoods, setLoadedGoods] = useState<Goods[]>([]);
@@ -40,7 +35,11 @@ const Main = () => {
 
     const newGoods: Goods[] = data.slice(startIndex, endIndex);
 
-    setLoadedGoods((prevGoods: Goods[]) => [...prevGoods, ...newGoods]);
+    setLoadedGoods((prevGoods: Goods[]) => {
+      const uniqueGoods = [...new Set([...prevGoods, ...newGoods])];
+      return uniqueGoods;
+    });
+
     setPage(page + 1);
   };
 
@@ -57,16 +56,17 @@ const Main = () => {
         return;
       fetchGoods(page);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [page]);
 
   return (
     <div className="container">
+      <FillterGoods goods={loadedGoods} setGoods={setLoadedGoods} />
       <Wrapper>
         {loadedGoods.map((good) => (
-          <Card key={generateUniqueId()} good={good}></Card>
+          <Card key={good.id} good={good}></Card>
         ))}
       </Wrapper>
     </div>
